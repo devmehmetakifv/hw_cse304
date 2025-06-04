@@ -11,14 +11,20 @@ class FileReader:
         metadata = {}
         parts = header_line.strip().split(' - ')
         
-        # Parse the first part which contains id and measurement type
-        if parts and ':' in parts[0]:
-            id_parts = parts[0].split(':')
-            if len(id_parts) > 1:
-                metadata['id'] = id_parts[0].strip()
-                measurement_parts = id_parts[1].strip().split(' ')
-                if len(measurement_parts) > 1:
-                    metadata['type'] = measurement_parts[1].strip()
+        # Parse the first part which contains ID and measurement type
+        # Example: "id:1 ölçüm: sıcaklık"
+        if parts and len(parts) > 0:
+            first_part = parts[0].strip()
+            
+            # Extract ID
+            if 'id:' in first_part:
+                id_section = first_part.split('ölçüm:')[0].strip()
+                if 'id:' in id_section:
+                    metadata['id'] = id_section.replace('id:', '').strip()
+            
+            # Extract measurement type
+            if 'ölçüm:' in first_part:
+                metadata['type'] = first_part.split('ölçüm:')[1].strip()
         
         # Parse location if available
         if len(parts) > 1 and 'yer:' in parts[1]:
