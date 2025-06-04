@@ -1,0 +1,2 @@
+id:1 ölçüm: nem - yer: MERKEZ - tarih: 11.11.2011 , max: 65.20
+id:2 ölçüm: nem - yer: MERKEZ - tarih: 12.11.2011 , max: 64.00

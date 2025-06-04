@@ -1,0 +1,2 @@
+id:1 ölçüm: sıcaklık - yer: MERKEZ - tarih: 11.11.2011 , avg: 15.57
+id:2 ölçüm: sıcaklık - yer: MERKEZ - tarih: 12.11.2011 , avg: 16.72
