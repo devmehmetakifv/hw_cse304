@@ -1,0 +1,97 @@
+COE 304 –  SOFTWARE ARCHITECTURE AND DESIGN
+
+SPRING 2025
+
+HOMEWORK 2
+
+Son teslim tarihi: 4 June 2025 WEDNESDAY, 23:59
+
+1) SOFTWARE DESIGN (60 pts)
+Below is the interface draft of an application designed for performing specific statistical operations. This interface aims to execute operations defined on it for temperature and relative humidity values contained in a folder.
+The folder entered into the software includes past measurements of temperature and relative humidity. There are two subfolders in the root folder, each holding files with separate temperature and humidity measurement data. The measurements were performed on different days and stored in separate files for each day.
+The operations to be performed are as follows:
+-	Find Average: Calculate the average of the values in each measurement file within the given folder. If "Global" is selected, the average of all values related to the physical measurement should be calculated.
+-	Find Maximum: Determine the highest value among the data in each measurement file within the given folder. If "Global" is selected, the highest value among all data related to the physical measurement should be calculated.
+-	Find Minimum: Determine the lowest value among the data in each measurement file within the given folder. If "Global" is selected, the lowest value among all data related to the physical measurement should be calculated.
+-	Find Standard Deviation: Calculate the standard deviation of the values in each measurement file within the given folder. If "Global" is selected, the standard deviation of all values related to the physical measurement should be calculated.
+-	Find Frequency: Calculate how many times each value occurs in the data of each measurement file within the given folder. If "Global" is selected, calculate the frequency of all values related to the physical measurement.
+-	Find Median: Calculate the median of the values in each measurement file within the given folder. If "Global" is selected, calculate the median of all values related to the physical measurement.
+Important Note: For your assignment, solutions must be developed separately for the measurement results of two different physical quantities (temperature results - humidity results). Therefore, global calculations must ensure that values are not mixed.
+
+
+Example Interface:
+
+(I provided the example interface screenshot in chat)
+ 
+The provided graphical interface figure is merely a draft example. You may use any graphical interface infrastructure you prefer, as well as any OOP-based programming language of your choice.
+Interface Usage:
+•	Before performing calculations, the user must select a folder. Once the folder is selected, its location should be displayed next to the "Select Folder" section. At this stage, the user should be able to select the folder containing all the measurements using "Select Folder."
+•	The user should specify the type of calculations they want to perform on the measurements by marking checkboxes.
+•	The calculations defined in Step 2 should be executed by pressing the "Calculate" button. For the format in which calculation results are displayed, please check the example.
+•	Information regarding the execution of calculations should be displayed in the "Message Content" section. This message should indicate the location of the folder containing the results. Below are some example messages; you can use different or additional message phrases as needed.
+Message Content Examples:
+•	The calculations were successfully performed. Folder containing results: XXX
+•	An error occurred during the calculation. Please try again.
+Note: The square sections provided in the interface represent checkboxes. The "Calculate" button triggers the execution of the calculations.
+
+
+ 
+Develop and program the software detailed above, keeping the following points in mind:
+•	The calculation processes within the software may require multiple sequential steps. Analyze these operations and, if such a need exists, try to define the steps as comprehensively as possible.
+•	This assignment aims to practice software design patterns. The more design patterns you apply, the higher your score will be. You must aim to use appropriate patterns covered in the course.
+•	The behavior developed for the software should be as flexible as possible. For example, during runtime, calculations should be added or removed via checkboxes. Adding and removing operations should not affect or necessitate changes to core structures related to calculations (e.g., data structures holding measurement data, objects).
+•	The software must adhere to the SOLID principles. The object-oriented hierarchy within the program should be defined and coded to ensure that any potential modifications to the software will not violate these principles.
+Note: Sample folders will not be provided for the assignment. You are required to create examples based on the examples given below. To ensure the functionality of your assignment, be sure to include your created examples in your submission.
+2. REPORT (40 pts)
+Draw the class diagram, use case diagram, and sequence diagram for the designed software.
+In your developed code for the assignment, provide a detailed explanation of which software design patterns you utilized. In your explanation, be sure to mention the classes used by the design pattern and the connections between these classes. 
+ÖRNEK ÖLÇÜM VE ÇIKTI
+User should select one directory: Example : olcumler
+There will be two directories under olcumler:
+sıcaklık
+nem
+
+Under these directories, there will be files contining measurements. In the directory, there may be multiple files. You can name the files as the following:
+id1_Sıcaklık_YER_11.11.2011.txt
+
+Format of the files:
+1)First line gives a brief information about the measurement in the file. 
+2) The following lines holds the time of the measurement and the related value for the measurement. There will be ‘,’ between these fields.
+Example:
+id:1 ölçüm: sıcaklık - yer: YER - tarih: 11.11.2011
+08:00:00,12
+08:05:00,14
+08:10:00,12
+08:15:00,14
+08:20:00,13
+...
+
+Example Output
+Create a result directory under olcumler directory. 
+Considering the example given above, Hold two separate directories for the given physical quantity.
+sıcaklık
+nem
+
+Separate files should be created under each folder associated with a physical quantity for every calculation performed.
+Example: maximumdegerler.txt under sıcaklık under result:
+Content
+id:1 ölçüm: sıcaklık - yer: YER - tarih: 11.11.2011 , max: 20
+id:2 ölçüm: sıcaklık - yer: YER - tarih: 12.11.2011 , max: 21
+...
+
+Örnek: frekanslar.txt under sıcaklık under result.
+Content
+id:1 ölçüm: sıcaklık - yer: YER - tarih: 11.11.2011
+9 Derece 8 defa ölçüldü
+10 Derece 14 defa ölçüldü
+11 Derece 15 defa ölçüldü
+---------------
+id:2 ölçüm: sıcaklık - yer: YER - tarih: 12.11.2011
+9 Derece 5 defa ölçüldü
+10 Derece 10 defa ölçüldü
+11 Derece 14 defa ölçüldü
+---------------
+...
+Example for global measurements: (Could hold a single line)
+globalmaximum.txt:
+max: 21
