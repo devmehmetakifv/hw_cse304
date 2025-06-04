@@ -36,7 +36,8 @@ class AverageStrategy(StatisticsStrategy):
         return "average"
     
     def format_result(self, result):
-        return f"avg: {result:.2f}"
+        # Format with no decimal places if it's a whole number
+        return f"avg: {result if result == int(result) else result:.2f}"
 
 
 class MaximumStrategy(StatisticsStrategy):
@@ -50,7 +51,8 @@ class MaximumStrategy(StatisticsStrategy):
         return "maximum"
     
     def format_result(self, result):
-        return f"max: {result:.2f}"
+        # Format with no decimal places if it's a whole number
+        return f"max: {result if result == int(result) else result:.2f}"
 
 
 class MinimumStrategy(StatisticsStrategy):
@@ -64,7 +66,8 @@ class MinimumStrategy(StatisticsStrategy):
         return "minimum"
     
     def format_result(self, result):
-        return f"min: {result:.2f}"
+        # Format with no decimal places if it's a whole number
+        return f"min: {result if result == int(result) else result:.2f}"
 
 
 class StandardDeviationStrategy(StatisticsStrategy):
@@ -78,7 +81,8 @@ class StandardDeviationStrategy(StatisticsStrategy):
         return "standarddeviation"
     
     def format_result(self, result):
-        return f"std: {result:.2f}"
+        # Format with no decimal places if it's a whole number
+        return f"std: {result if result == int(result) else result:.2f}"
 
 
 class FrequencyStrategy(StatisticsStrategy):
@@ -92,9 +96,11 @@ class FrequencyStrategy(StatisticsStrategy):
         return "frequency"
     
     def format_result(self, result):
+        # This will be overridden by the measurement-type specific formatting
+        # in the ResultWriter class
         formatted = []
         for value, count in sorted(result.items()):
-            formatted.append(f"{value} Derece {count} defa ölçüldü")
+            formatted.append(f"{value} {count} defa ölçüldü")
         return "\n".join(formatted)
 
 
@@ -109,7 +115,8 @@ class MedianStrategy(StatisticsStrategy):
         return "median"
     
     def format_result(self, result):
-        return f"median: {result:.2f}"
+        # Format with no decimal places if it's a whole number
+        return f"median: {result if result == int(result) else result:.2f}"
 
 
 class CalculatorContext:
@@ -169,7 +176,15 @@ class ResultWriter:
             for file_obj, result in file_results:
                 if isinstance(result, dict):  # For frequency results
                     f.write(f"{ResultWriter._format_file_metadata(file_obj)}\n")
-                    f.write(strategy.format_result(result))
+                    
+                    # Format frequency results with appropriate unit based on measurement type
+                    formatted = []
+                    measurement_unit = ResultWriter._get_measurement_unit(measurement_type)
+                    
+                    for value, count in sorted(result.items()):
+                        formatted.append(f"{value} {measurement_unit} {count} defa ölçüldü")
+                    
+                    f.write("\n".join(formatted))
                     f.write("\n---------------\n")
                 else:
                     f.write(f"{ResultWriter._format_file_metadata(file_obj)} , {strategy.format_result(result)}\n")
@@ -189,7 +204,14 @@ class ResultWriter:
         
         with open(file_path, 'w', encoding='utf-8') as f:
             if isinstance(result, dict):  # For frequency results
-                f.write(strategy.format_result(result))
+                # Format frequency results with appropriate unit based on measurement type
+                formatted = []
+                measurement_unit = ResultWriter._get_measurement_unit(measurement_type)
+                
+                for value, count in sorted(result.items()):
+                    formatted.append(f"{value} {measurement_unit} {count} defa ölçüldü")
+                
+                f.write("\n".join(formatted))
             else:
                 f.write(strategy.format_result(result))
     
@@ -197,4 +219,14 @@ class ResultWriter:
     def _format_file_metadata(file_obj):
         """Format file metadata for output"""
         metadata = file_obj.metadata
-        return f"id:{metadata.get('id', 'unknown')} ölçüm: {metadata.get('type', 'unknown')} - yer: {metadata.get('location', 'unknown')} - tarih: {metadata.get('date', 'unknown')}" 
+        return f"id:{metadata.get('id', 'unknown')} ölçüm: {metadata.get('type', 'unknown')} - yer: {metadata.get('location', 'unknown')} - tarih: {metadata.get('date', 'unknown')}"
+    
+    @staticmethod
+    def _get_measurement_unit(measurement_type):
+        """Get the appropriate unit for the measurement type"""
+        if measurement_type == 'temperature':
+            return "Derece"
+        elif measurement_type == 'humidity':
+            return "%"  # Percent symbol for humidity
+        else:
+            return ""  # Default empty string for unknown types 
